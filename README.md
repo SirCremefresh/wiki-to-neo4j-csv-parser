@@ -13,8 +13,8 @@ Local file URIs expect the files to be located in the {user_home}/wikidata folde
 
 | InputFile              | URI                                                                                    | Output Folder | FileLoader | Expected Runtime |
 |------------------------|----------------------------------------------------------------------------------------|---------------|------------|------------------|
-| EN_WIKI                | enwiki-latest-pages-articles.xml                                                       | en_wiki       | PLAIN      |                  |
-| EN_WIKI_BZ2            | enwiki-latest-pages-articles.xml.bz2                                                   | en_wiki       | BZ2        |                  |
+| EN_WIKI                | enwiki-latest-pages-articles.xml                                                       | en_wiki       | PLAIN      | 20min            |
+| EN_WIKI_BZ2            | enwiki-latest-pages-articles.xml.bz2                                                   | en_wiki       | BZ2        | 1h               |
 | EN_WIKI_BZ2_REMOTE     | https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2         | en_wiki       | REMOTE_BZ2 | 1h 30min         |
 | SIMPLE_WIKI            | simplewiki-latest-pages-articles.xml                                                   | simple_wiki   | PLAIN      | 20s              |
 | SIMPLE_WIKI_BZ2        | simplewiki-latest-pages-articles.xml.bz2                                               | simple_wiki   | BZ2        | 50s              |
@@ -70,7 +70,7 @@ You can find dump files at https://dumps.wikimedia.org/.
 
 | wiki        | Import Time | Node Count | Relationship Count | Data Volume Size |
 |-------------|-------------|------------|--------------------|------------------|
-| en_wiki     | 13min 57s   | 22781670   | 235766142          | 25.8G            |
+| en_wiki     | 14min       | 22781670   | 235766142          | 26G              |
 | simple_wiki | 40s         | 430468     | 3353337            | 900M             |
 
 ## Sample Importing CSVs in docker container
@@ -163,14 +163,14 @@ CREATE CONSTRAINT pages_urlTitle
 FOR (p:Page) REQUIRE p.urlTitle IS UNIQUE
 ```
 
-## Find Page
+### Find Page
 
 ```
 MATCH (p:Page { urlTitle: 'Switzerland' })
 RETURN p
 ```
 
-## Find Shortest Path
+### Find Shortest Path
 
 ```
 MATCH path=shortestPath((start:Page)-[:LINKS_TO*1..20]->(end:Page))

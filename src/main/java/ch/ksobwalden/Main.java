@@ -16,8 +16,7 @@ public class Main {
         InputFile inputFile = InputFile.SIMPLE_WIKI_BZ2_REMOTE;
         System.out.println("Parsing input file: " + inputFile);
 
-        // The en wiki dump is pretty large, so we have to update the index limit
-        // to not trigger some security warning.
+        // The en wiki dump is pretty large, so we have to update the size limit to not trigger some security warning.
         System.setProperty("jdk.xml.totalEntitySizeLimit", String.valueOf(Integer.MAX_VALUE));
         long start = System.nanoTime();
 
