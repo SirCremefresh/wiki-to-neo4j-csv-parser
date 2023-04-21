@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  neo4j:
+    image: "neo4j:5.5"
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - data:/data
+    environment:
+      - NEO4J_AUTH=none
+      - NEO4J_dbms_memory_transaction_total_max=4096M
+      - NEO4J_server_memory_pagecache_size=4096M
+      - NEO4J_server_memory_heap_max__size=4096M
+    healthcheck:
+      test: wget http://localhost:7474 || exit 1
+      interval: 1s
+      timeout: 10s
+      retries: 20
+      start_period: 3s
+
+volumes:
+  plugins:
+  data:
+
+

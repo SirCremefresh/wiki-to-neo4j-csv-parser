@@ -72,3 +72,108 @@ You can find dump files at https://dumps.wikimedia.org/.
 |-------------|-------------|------------|--------------------|------------------|
 | en_wiki     | 13min 57s   | 22781670   | 235766142          | 25.8G            |
 | simple_wiki | 40s         | 430468     | 3353337            | 900M             |
+
+## Sample Importing CSVs in docker container
+
+There is a minimal docker compose configuration for neo4j in the file: [docker-compose.yaml](docker-compose.yaml).
+
+### Setup & Import Simple-Wiki
+
+```shell
+echo "Remove existing installation if exists"
+docker compose down --volumes
+docker compose rm --volumes --stop --force
+
+echo "Start and Stop Neo4j to initialize the volumes"
+docker compose up --detach --wait
+docker compose down
+
+echo "Import the CSV files"
+header_dir="$(pwd)/headers"
+data_dir="$(pwd)/data/simple_wiki"
+report="$(pwd)/import.report"
+echo -n "" >"${report}"
+docker run --interactive --tty --rm \
+  --volume=wiki-to-neo4j-csv-parser_data:/data \
+  --volume="${data_dir}":/import \
+  --volume="${header_dir}":/import-headers \
+  --volume="${report}":/var/lib/neo4j/import.report \
+  neo4j:5.5 \
+  neo4j-admin database import full --overwrite-destination \
+  --nodes=Page=/import-headers/page_headers.csv,/import/pages-\\d+.csv \
+  --relationships=LINKS_TO=/import-headers/link_headers.csv,/import/links-\\d+.csv \
+  --skip-bad-relationships
+
+```
+
+### Setup & Import En-Wiki
+
+```shell
+echo "Remove existing installation if exists"
+docker compose down --volumes
+docker compose rm --volumes --stop --force
+
+echo "Start and Stop Neo4j to initialize the volumes"
+docker compose up --detach --wait
+docker compose down
+
+echo "Import the CSV files"
+header_dir="$(pwd)/headers"
+data_dir="$(pwd)/data/en_wiki"
+report="$(pwd)/import.report"
+echo -n "" >"${report}"
+docker run --interactive --tty --rm \
+  --volume=neo4j-en-wiki_data:/data \
+  --volume="${data_dir}":/import \
+  --volume="${header_dir}":/import-headers \
+  --volume="${report}":/var/lib/neo4j/import.report \
+  neo4j:5.5 \
+  neo4j-admin database import full --overwrite-destination \
+  --nodes=Page=/import-headers/page_headers.csv,/import/pages-\\d+.csv \
+  --relationships=LINKS_TO=/import-headers/link_headers.csv,/import/links-\\d+.csv \
+  --skip-bad-relationships
+
+```
+
+### Start
+
+The admin GUI is available on [http://localhost:7474/browser/](http://localhost:7474/browser/) you can authenticate with
+the "authentication type" "no authentication".
+The database can be reached on port 7687.
+
+```shell
+docker compose up --detach --wait
+```
+
+### Stop
+
+```shell
+docker compose down
+```
+
+## Sample Cypher
+
+### Create Index
+
+When you want to do path searches over the "urlTitle" it is advised to create an index on it to increase the lookup
+speed.
+
+```
+CREATE CONSTRAINT pages_urlTitle
+FOR (p:Page) REQUIRE p.urlTitle IS UNIQUE
+```
+
+## Find Page
+
+```
+MATCH (p:Page { urlTitle: 'Switzerland' })
+RETURN p
+```
+
+## Find Shortest Path
+
+```
+MATCH path=shortestPath((start:Page)-[:LINKS_TO*1..20]->(end:Page))
+WHERE start.urlTitle = "Switzerland" AND end.urlTitle = "United_States"
+RETURN path
+```
