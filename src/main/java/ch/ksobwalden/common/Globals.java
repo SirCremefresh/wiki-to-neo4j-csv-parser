@@ -10,12 +10,8 @@ public final class Globals {
     private static final String WIKIDATA_FOLDER = "wikidata";
 
     public static Path getWikidataFolder() {
-        var folder = FileUtils
+        return FileUtils
                 .getUserDirectory().toPath()
                 .resolve(WIKIDATA_FOLDER);
-        if (Files.notExists(folder)) {
-            throw new RuntimeException("Wikidata folder does not exist at path: " + folder);
-        }
-        return folder;
     }
 }
