@@ -123,7 +123,7 @@ data_dir="$(pwd)/data/en_wiki"
 report="$(pwd)/import.report"
 echo -n "" >"${report}"
 docker run --interactive --tty --rm \
-  --volume=neo4j-en-wiki_data:/data \
+  --volume=wiki-to-neo4j-csv-parser_data:/data \
   --volume="${data_dir}":/import \
   --volume="${header_dir}":/import-headers \
   --volume="${report}":/var/lib/neo4j/import.report \
