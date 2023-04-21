@@ -1,4 +1,4 @@
-# Wikidump Parser: Convert Wikipedia Dumps to Neo4j Loadable CSVs
+# Convert Wikipedia Dumps to Neo4j Loadable CSVs
 
 This application enables you to transform and download Wikipedia dumps into Neo4j loadable CSVs. The main method's
 inputFile variable can be configured to suit your needs. If you only need the results once, using the remote version of
@@ -70,5 +70,5 @@ You can find dump files at https://dumps.wikimedia.org/.
 
 | wiki        | Import Time | Node Count | Relationship Count | Data Volume Size |
 |-------------|-------------|------------|--------------------|------------------|
-| en_wiki     | 13m 57s     | 22781670   | 235766142          | 25.8G            |
+| en_wiki     | 13min 57s   | 22781670   | 235766142          | 25.8G            |
 | simple_wiki | 40s         | 430468     | 3353337            | 900M             |
