@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) throws XMLStreamException, IOException {
         // Select what wiki file you want to process
-        InputFile inputFile = InputFile.EN_WIKI;
+        InputFile inputFile = InputFile.SIMPLE_WIKI_BZ2_REMOTE;
         System.out.println("Parsing input file: " + inputFile);
 
         // The en wiki dump is pretty large, so we have to update the index limit
@@ -26,8 +26,7 @@ public class Main {
         var pageWriter = new CsvWriter(outputFiles.pagesFile());
         var linkWriter = new CsvWriter(outputFiles.linksFile());
 
-        new WikiDumpParser(pageWriter, linkWriter)
-                .process(inputFileReader);
+        WikiDumpParser.process(pageWriter, linkWriter, inputFileReader);
 
         long stop = System.nanoTime();
         System.out.println("Time: " + (stop - start) / 1000000.0 + " ms");

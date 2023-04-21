@@ -24,8 +24,7 @@ class IntegrationTest {
         var pageWriter = new CsvWriter(pages);
         var linkWriter = new CsvWriter(links);
 
-        new WikiDumpParser(pageWriter, linkWriter)
-                .process(sampleInputFile);
+        WikiDumpParser.process(pageWriter, linkWriter, sampleInputFile);
 
         var realOutputLinks = getLines(links.toString(Charset.defaultCharset()));
         var realOutputPages = getLines(pages.toString(Charset.defaultCharset()));
