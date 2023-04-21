@@ -98,7 +98,7 @@ docker run --interactive --tty --rm \
   --volume="${data_dir}":/import \
   --volume="${header_dir}":/import-headers \
   --volume="${report}":/var/lib/neo4j/import.report \
-  neo4j:5.5 \
+  neo4j:5.7 \
   neo4j-admin database import full --overwrite-destination \
   --nodes=Page=/import-headers/page_headers.csv,/import/pages-\\d+.csv \
   --relationships=LINKS_TO=/import-headers/link_headers.csv,/import/links-\\d+.csv \
@@ -127,7 +127,7 @@ docker run --interactive --tty --rm \
   --volume="${data_dir}":/import \
   --volume="${header_dir}":/import-headers \
   --volume="${report}":/var/lib/neo4j/import.report \
-  neo4j:5.5 \
+  neo4j:5.7 \
   neo4j-admin database import full --overwrite-destination \
   --nodes=Page=/import-headers/page_headers.csv,/import/pages-\\d+.csv \
   --relationships=LINKS_TO=/import-headers/link_headers.csv,/import/links-\\d+.csv \
