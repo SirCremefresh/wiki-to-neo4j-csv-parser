@@ -29,4 +29,13 @@ public enum InputFile {
     public String getOutputFolder() {
         return outputFolder;
     }
+
+    @Override
+    public String toString() {
+        return "InputFile{" +
+                "uri=" + uri +
+                ", outputFolder='" + outputFolder + '\'' +
+                ", fileLoader=" + fileLoader +
+                '}';
+    }
 }

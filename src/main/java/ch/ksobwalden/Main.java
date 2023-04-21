@@ -13,7 +13,8 @@ public class Main {
 
     public static void main(String[] args) throws XMLStreamException, IOException {
         // Select what wiki file you want to process
-        InputFile inputFile = InputFile.SIMPLE_WIKI;
+        InputFile inputFile = InputFile.EN_WIKI;
+        System.out.println("Parsing input file: " + inputFile);
 
         // The en wiki dump is pretty large, so we have to update the index limit
         // to not trigger some security warning.
