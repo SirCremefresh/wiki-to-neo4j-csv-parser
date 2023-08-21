@@ -8,19 +8,14 @@ import java.nio.file.Path;
 
 public class FileReaderImpl implements FileReader {
     @Override
-    public BufferedInputStream fromFileSystem(Path path) throws FileNotFoundException {
+    public BufferedInputStream fromFileSystem(Path path) throws IOException {
         FileInputStream inputStream = new FileInputStream(path.toFile());
         return new BufferedInputStream(inputStream, Globals.DEFAULT_BUFFER_SIZE);
     }
 
     @Override
-    public BufferedInputStream fromUrl(URL path) {
-        InputStream a= null;
-        try {
-            a = path.openStream();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return new BufferedInputStream(a, Globals.DEFAULT_BUFFER_SIZE);
+    public BufferedInputStream fromUrl(URL path) throws IOException {
+        InputStream inputStream = path.openStream();
+        return new BufferedInputStream(inputStream, Globals.DEFAULT_BUFFER_SIZE);
     }
 }
