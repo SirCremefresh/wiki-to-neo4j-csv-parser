@@ -1,9 +1,9 @@
 # Convert Wikipedia Dumps to Neo4j Loadable CSVs
 
-This application enables you to transform and download Wikipedia dumps into Neo4j loadable CSVs. The main method's
-inputFile variable can be configured to suit your needs. If you only need the results once, using the remote version of
-the InputFile is recommended, as it automatically downloads the latest dump. For multiple runs, such as for testing or
-adding features to the code, it's advisable to download and unzip the files beforehand to optimize performance.
+This application enables you to transform and download Wikipedia dumps into Neo4j loadable CSVs. If you only need the
+results once, using the remote version of the InputFile is recommended, as it automatically downloads the latest dump.
+For multiple runs, such as for testing or adding features to the code, it's advisable to download and unzip the files
+beforehand to optimize performance.
 
 The CSV files will be output to the data/{wiki} directory.
 
@@ -11,14 +11,24 @@ The CSV files will be output to the data/{wiki} directory.
 
 Local file URIs expect the files to be located in the {user_home}/wikidata folder.
 
-| InputFile              | URI                                                                                    | Output Folder | FileLoader | Expected Runtime |
-|------------------------|----------------------------------------------------------------------------------------|---------------|------------|------------------|
-| EN_WIKI                | enwiki-latest-pages-articles.xml                                                       | en_wiki       | PLAIN      | 20min            |
-| EN_WIKI_BZ2            | enwiki-latest-pages-articles.xml.bz2                                                   | en_wiki       | BZ2        | 1h               |
-| EN_WIKI_BZ2_REMOTE     | https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2         | en_wiki       | REMOTE_BZ2 | 1h 30min         |
-| SIMPLE_WIKI            | simplewiki-latest-pages-articles.xml                                                   | simple_wiki   | PLAIN      | 20s              |
-| SIMPLE_WIKI_BZ2        | simplewiki-latest-pages-articles.xml.bz2                                               | simple_wiki   | BZ2        | 50s              |
-| SIMPLE_WIKI_BZ2_REMOTE | https://dumps.wikimedia.org/simplewiki/latest/simplewiki-latest-pages-articles.xml.bz2 | simple_wiki   | REMOTE_BZ2 | 4min             |
+| InputFile                        | URI                                                                                    | Output Folder | FileLoader | Expected Runtime |
+|----------------------------------|----------------------------------------------------------------------------------------|---------------|------------|------------------|
+| EN_WIKI                          | enwiki-latest-pages-articles.xml                                                       | en_wiki       | PLAIN      | 20min            |
+| EN_WIKI_BZ2                      | enwiki-latest-pages-articles.xml.bz2                                                   | en_wiki       | BZ2        | 1h               |
+| EN_WIKI_BZ2_REMOTE               | https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2         | en_wiki       | REMOTE_BZ2 | 1h 30min         |
+| SIMPLE_WIKI                      | simplewiki-latest-pages-articles.xml                                                   | simple_wiki   | PLAIN      | 20s              |
+| SIMPLE_WIKI_BZ2                  | simplewiki-latest-pages-articles.xml.bz2                                               | simple_wiki   | BZ2        | 50s              |
+| SIMPLE_WIKI_BZ2_REMOTE (Default) | https://dumps.wikimedia.org/simplewiki/latest/simplewiki-latest-pages-articles.xml.bz2 | simple_wiki   | REMOTE_BZ2 | 4min             |
+
+To run the application, use the following command:
+```shell
+mvn compile exec:java -Dexec.args="{InputFile}"
+```
+
+Sample:
+```shell
+mvn compile exec:java -Dexec.args="SIMPLE_WIKI_BZ2_REMOTE"
+```
 
 ## Output Data
 
