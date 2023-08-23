@@ -7,13 +7,18 @@ import ch.ksobwalden.wikidump.WikiDumpParser;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
+import java.util.Arrays;
 
 
 public class Main {
 
     public static void main(String[] args) throws XMLStreamException, IOException {
         // Select what wiki file you want to process
-        InputFile inputFile = InputFile.SIMPLE_WIKI_BZ2_REMOTE;
+        InputFile defaultInputFile = InputFile.SIMPLE_WIKI_BZ2_REMOTE;
+        InputFile inputFile = Arrays.stream(args)
+                .findFirst()
+                .map(InputFile::parse)
+                .orElse(defaultInputFile);
         System.out.println("Parsing input file: " + inputFile);
 
         // The en wiki dump is pretty large, so we have to update the size limit to not trigger some security warning.

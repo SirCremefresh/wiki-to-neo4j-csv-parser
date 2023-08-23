@@ -2,6 +2,8 @@ package ch.ksobwalden.io;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public enum InputFile {
     EN_WIKI("enwiki-latest-pages-articles.xml", "en_wiki", FileLoader.PLAIN),
@@ -37,5 +39,14 @@ public enum InputFile {
                 ", outputFolder='" + outputFolder + '\'' +
                 ", fileLoader=" + fileLoader +
                 '}';
+    }
+
+    public static InputFile parse(String s) {
+        try {
+            return InputFile.valueOf(s);
+        } catch (IllegalArgumentException e) {
+            String enumNames = Arrays.stream(InputFile.values()).map(Enum::name).collect(Collectors.joining(", "));
+            throw new IllegalArgumentException("Could not parse InputFile from: " + s + ". Available values: " + enumNames, e);
+        }
     }
 }
