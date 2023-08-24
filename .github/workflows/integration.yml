@@ -18,7 +18,8 @@ jobs:
       - name: Stop neo4j
         run: docker compose --file docker-compose-ci.yaml down
       - name: import data
-        run: >
+        shell: bash
+        run: |
           header_dir="$(pwd)/headers"
           data_dir="$(pwd)/src/test/resources/"
           report="$(pwd)/import.report"
