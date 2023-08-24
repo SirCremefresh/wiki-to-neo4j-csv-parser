@@ -24,7 +24,7 @@ jobs:
           data_dir="$(pwd)/src/test/resources/"
           report="$(pwd)/import.report"
           echo -n "" >"${report}"
-          docker run --interactive --tty --rm \
+          docker run --rm \
             --volume=wiki-to-neo4j-csv-parser_data:/data \
             --volume="${data_dir}":/import \
             --volume="${header_dir}":/import-headers \
