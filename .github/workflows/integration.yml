@@ -34,7 +34,14 @@ jobs:
             --nodes=Page=/import-headers/page_headers.csv,/import/sample_pages.csv \
             --relationships=LINKS_TO=/import-headers/link_headers.csv,/import/sample_links.csv \
             --skip-bad-relationships
+          
+
+      - name: Run initialized neo4j
+        run: docker compose --file docker-compose-ci.yaml up --wait --detach
 
       - name: Print logs
         if: always()
         run: docker compose --file docker-compose-ci.yaml logs
+      - name: Print import report
+        if: always()
+        run: cat import.report
