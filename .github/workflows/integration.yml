@@ -13,8 +13,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Run docker compsoe
+      - name: Initialize neo4j volumes
         run: docker compose --file docker-compose-ci.yaml up --wait --detach
+      - name: Stop neo4j
+        run: docker compose --file docker-compose-ci.yaml down
+      - name: import data
+        run: >
+          header_dir="$(pwd)/headers"
+          data_dir="$(pwd)/src/test/resources/"
+          report="$(pwd)/import.report"
+          echo -n "" >"${report}"
+          docker run --interactive --tty --rm \
+            --volume=wiki-to-neo4j-csv-parser_data:/data \
+            --volume="${data_dir}":/import \
+            --volume="${header_dir}":/import-headers \
+            --volume="${report}":/var/lib/neo4j/import.report \
+            neo4j:5.7 \
+            neo4j-admin database import full --overwrite-destination \
+            --nodes=Page=/import-headers/page_headers.csv,/import/sample_pages.csv \
+            --relationships=LINKS_TO=/import-headers/link_headers.csv,/import/sample_links.csv \
+            --skip-bad-relationships
 
       - name: Print logs
         if: always()
