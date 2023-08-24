@@ -34,7 +34,27 @@ jobs:
             --nodes=Page=/import-headers/page_headers.csv,/import/sample_pages.csv \
             --relationships=LINKS_TO=/import-headers/link_headers.csv,/import/sample_links.csv \
             --skip-bad-relationships
-          
+
+      - name: check imported data
+        shell: bash
+        run: |
+          test_cypher="
+            MATCH (a)--(b)
+            WHERE a.title = 'AnAmericanInParis' AND b.title = 'An American in Paris'
+            RETURN a.title, b.title;
+            "
+          should_output="a.title, b.title
+            \"AnAmericanInParis\", \"An American in Paris\""
+          output=$(echo "${test_cypher}" | cypher-shell)
+            
+          if [ "$should_output" == "$output" ]; then
+            echo "Successfully executed cypher query"
+          else
+            echo "Result was not as expected"
+            echo "Expected: ${should_output}"
+            echo "Actual: ${output}"
+            exit 1
+          fi
 
       - name: Run initialized neo4j
         run: docker compose --file docker-compose-ci.yaml up --wait --detach
