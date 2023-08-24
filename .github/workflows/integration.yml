@@ -45,8 +45,8 @@ jobs:
             "
           should_output="a.title, b.title
             \"AnAmericanInParis\", \"An American in Paris\""
-          output=$(echo "${test_cypher}" | cypher-shell)
-            
+          output=$(echo "${test_cypher}" | docker exec --interactive wiki-to-neo4j-csv-parser-neo4j-1 sh -c "cypher-shell")          
+          
           if [ "$should_output" == "$output" ]; then
             echo "Successfully executed cypher query"
           else
