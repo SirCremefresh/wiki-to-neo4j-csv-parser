@@ -19,7 +19,7 @@
         "(^|/|\\.)integration\\.yml$"
       ],
       "matchStrings": [
-        "neo4j:(?<currentValue>\\S*)"
+        "neo4j:(?<currentValue>[\\d\\.]*)"
       ],
       "depNameTemplate": "neo4j",
       "datasourceTemplate": "docker"
