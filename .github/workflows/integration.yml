@@ -14,6 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run docker compsoe
-        run: docker run neo4j
-      - name: Run docker compsoe
-        run: docker compose up --wait
+        run: docker compose up -d
+      - name: Run docker compose logs
+        run: docker compose logs -f -t
