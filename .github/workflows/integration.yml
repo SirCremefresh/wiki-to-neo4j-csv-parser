@@ -1,0 +1,67 @@
+name: Neo4j Integration Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Initialize neo4j volumes
+        run: docker compose --file docker-compose-ci.yaml up --wait --detach
+      - name: Stop neo4j
+        run: docker compose --file docker-compose-ci.yaml down
+      - name: import data
+        shell: bash
+        run: |
+          header_dir="$(pwd)/headers"
+          data_dir="$(pwd)/src/test/resources/"
+          report="$(pwd)/import.report"
+          echo -n "" >"${report}"
+          docker run --rm \
+            --volume=wiki-to-neo4j-csv-parser_data:/data \
+            --volume="${data_dir}":/import \
+            --volume="${header_dir}":/import-headers \
+            --volume="${report}":/var/lib/neo4j/import.report \
+            neo4j:5.7 \
+            neo4j-admin database import full --overwrite-destination \
+            --nodes=Page=/import-headers/page_headers.csv,/import/sample_pages.csv \
+            --relationships=LINKS_TO=/import-headers/link_headers.csv,/import/sample_links.csv \
+            --skip-bad-relationships
+
+      - name: Run initialized neo4j
+        run: docker compose --file docker-compose-ci.yaml up --wait --detach
+
+      - name: check imported data
+        shell: bash
+        run: |
+          test_cypher="
+            MATCH (a)--(b)
+            WHERE a.title = 'AnAmericanInParis' AND b.title = 'An American in Paris'
+            RETURN a.title, b.title;
+            "
+          should_output="a.title, b.title
+          \"AnAmericanInParis\", \"An American in Paris\""
+          output=$(echo "${test_cypher}" | docker exec --interactive wiki-to-neo4j-csv-parser-neo4j-1 sh -c "cypher-shell")          
+          
+          if [ "$should_output" == "$output" ]; then
+            echo "Successfully executed cypher query"
+          else
+            echo "Result was not as expected"
+            echo "Expected: ${should_output}"
+            echo "Actual: ${output}"
+            exit 1
+          fi
+
+      - name: Print logs
+        if: always()
+        run: docker compose --file docker-compose-ci.yaml logs
+      - name: Print import report
+        if: always()
+        run: cat import.report
