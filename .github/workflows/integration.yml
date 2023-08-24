@@ -14,4 +14,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run docker compsoe
-        run: docker compose --file docker-compose-ci.yaml up
+        run: docker compose --file docker-compose-ci.yaml up --wait --detach
