@@ -14,6 +14,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run docker compsoe
-        run: docker compose --file docker-compose-ci.yaml up  -d
-      - name: Run docker compose logs
-        run: docker compose --file docker-compose-ci.yaml  logs -f -t
+        run: docker compose --file docker-compose-ci.yaml up
