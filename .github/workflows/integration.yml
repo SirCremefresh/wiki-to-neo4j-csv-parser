@@ -35,6 +35,9 @@ jobs:
             --relationships=LINKS_TO=/import-headers/link_headers.csv,/import/sample_links.csv \
             --skip-bad-relationships
 
+      - name: Run initialized neo4j
+        run: docker compose --file docker-compose-ci.yaml up --wait --detach
+
       - name: check imported data
         shell: bash
         run: |
@@ -55,9 +58,6 @@ jobs:
             echo "Actual: ${output}"
             exit 1
           fi
-
-      - name: Run initialized neo4j
-        run: docker compose --file docker-compose-ci.yaml up --wait --detach
 
       - name: Print logs
         if: always()
