@@ -11,5 +11,18 @@
       "matchUpdateTypes": ["minor", "patch", "pin"],
       "automerge": true
     }
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": [
+        "(^|/|\\.)README\\.md$",
+        "(^|/|\\.)integration\\.yml$"
+      ],
+      "matchStrings": [
+        "neo4j:(?<currentValue>\\S*)"
+      ],
+      "depNameTemplate": "neo4j",
+      "datasourceTemplate": "docker"
+    }
   ]
 }
