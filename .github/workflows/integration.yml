@@ -15,3 +15,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Run docker compsoe
         run: docker compose --file docker-compose-ci.yaml up --wait --detach
+
+      - name: Print logs
+        if: always()
+        run: docker compose --file docker-compose-ci.yaml logs
