@@ -9,9 +9,9 @@ services:
       - data:/data
     environment:
       - NEO4J_AUTH=none
-      - NEO4J_dbms_memory_transaction_total_max=4096M
-      - NEO4J_server_memory_pagecache_size=4096M
-      - NEO4J_server_memory_heap_max__size=4096M
+      - NEO4J_server_memory_heap_initial__size='5000m'
+      - NEO4J_server_memory_heap_max__size='5000m'
+      - NEO4J_server_memory_pagecache_size='6600m'
     healthcheck:
       test: wget http://localhost:7474 || exit 1
       interval: 1s
