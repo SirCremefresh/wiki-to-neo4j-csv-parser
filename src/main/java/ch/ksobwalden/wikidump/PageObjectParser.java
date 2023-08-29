@@ -59,6 +59,11 @@ public class PageObjectParser implements XmlConsumer {
         links = new HashSet<>(matcher.groupCount());
         while (matcher.find()) {
             String linkTitle = matcher.group(1);
+            // Links can contain a # followed by an anchor.
+            // We remove the anchor if it exists.
+            if (linkTitle.contains("#")) {
+                linkTitle = linkTitle.substring(0, linkTitle.indexOf("#"));
+            }
             String linkUrlTitle = titleToUrlFormat(linkTitle);
             // If the url looks like the following "[[some Link]]"
             // We add "some Link" as the title and "Some_Link" as the Url title.
