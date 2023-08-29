@@ -86,6 +86,14 @@ You can find dump files at https://dumps.wikimedia.org/.
 ## Sample Importing CSVs in docker container
 
 There is a minimal docker compose configuration for neo4j in the file: [docker-compose.yaml](docker-compose.yaml).
+You can run the following commands to set up neo4j and import the CSVs.
+
+If you want to use password authentication you have to create a file called ".env" in the same directory as the
+docker-compose.yaml file. The file should look like this:
+```
+NEO4J_AUTH=neo4j/YOUR_PASSWORD
+```
+It is important that the username is "neo4j" otherwise neo4j will not start.
 
 ### Setup & Import Simple-Wiki
 
@@ -109,7 +117,7 @@ docker run --interactive --tty --rm \
   --volume="${header_dir}":/import-headers \
   --volume="${report}":/var/lib/neo4j/import.report \
   neo4j:5.11 \
-  neo4j-admin database import full --overwrite-destination --bad-tolerance=1000000 \
+  neo4j-admin database import full --overwrite-destination --bad-tolerance=10000000000 \
   --nodes=Page=/import-headers/page_headers.csv,/import/pages-\\d+.csv \
   --relationships=LINKS_TO=/import-headers/link_headers.csv,/import/links-\\d+.csv \
   --skip-bad-relationships
@@ -138,7 +146,7 @@ docker run --interactive --tty --rm \
   --volume="${header_dir}":/import-headers \
   --volume="${report}":/var/lib/neo4j/import.report \
   neo4j:5.11 \
-  neo4j-admin database import full --overwrite-destination --bad-tolerance=1000000 \
+  neo4j-admin database import full --overwrite-destination --bad-tolerance=10000000000 \
   --nodes=Page=/import-headers/page_headers.csv,/import/pages-\\d+.csv \
   --relationships=LINKS_TO=/import-headers/link_headers.csv,/import/links-\\d+.csv \
   --skip-bad-relationships
@@ -148,7 +156,8 @@ docker run --interactive --tty --rm \
 ### Start
 
 The admin GUI is available on [http://localhost:7474/browser/](http://localhost:7474/browser/) you can authenticate with
-the "authentication type" "no authentication".
+the "authentication type" "no authentication" or "username / password" depending on if you have set a password in the
+".env" file.
 The database can be reached on port 7687.
 
 ```shell

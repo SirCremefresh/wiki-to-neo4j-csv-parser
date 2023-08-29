@@ -8,7 +8,7 @@ services:
     volumes:
       - data:/data
     environment:
-      - NEO4J_AUTH=none
+      - NEO4J_AUTH=${NEO4J_AUTH:-none}
       - NEO4J_server_memory_heap_initial__size=5000m
       - NEO4J_server_memory_heap_max__size=5000m
       - NEO4J_server_memory_pagecache_size=6600m
