@@ -7,11 +7,13 @@ services:
       - "7687:7687"
     volumes:
       - data:/data
+      - plugins:/var/lib/neo4j/plugins
     environment:
       - NEO4J_AUTH=${NEO4J_AUTH:-none}
       - NEO4J_server_memory_heap_initial__size=5000m
       - NEO4J_server_memory_heap_max__size=5000m
       - NEO4J_server_memory_pagecache_size=6600m
+      - NEO4J_PLUGINS=["apoc"]
     restart: always
     healthcheck:
       test: wget http://localhost:7474 || exit 1
