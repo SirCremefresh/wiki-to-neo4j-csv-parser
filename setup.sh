@@ -78,6 +78,7 @@ echo "Importing the CSV files..."
 header_dir="$(pwd)/headers"
 data_dir="$(pwd)/data/$WIKI"
 report="$(pwd)/import.report"
+rm -f "${report}"
 echo "" >"${report}"
 docker run --interactive --tty --rm \
   --volume=wiki-to-neo4j-csv-parser_data:/data \
