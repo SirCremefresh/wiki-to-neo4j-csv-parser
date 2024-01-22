@@ -29,7 +29,7 @@ jobs:
             --volume="${data_dir}":/import \
             --volume="${header_dir}":/import-headers \
             --volume="${report}":/var/lib/neo4j/import.report \
-            neo4j:5.15 \
+            neo4j:5.16 \
             neo4j-admin database import full --overwrite-destination --bad-tolerance=1000000 \
             --nodes=Page=/import-headers/page_headers.csv,/import/sample_pages.csv \
             --relationships=LINKS_TO=/import-headers/link_headers.csv,/import/sample_links.csv \
